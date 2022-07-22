@@ -20,4 +20,3 @@ train = x[:, :].reshape(-1, 400).astype(np.float32)
 train_labels = np.array(train_labels)[:, np.newaxis]
 
 np.savez('trained.npz', train = train, train_labels=train_labels)
-    

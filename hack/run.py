@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+from sklearn import svm
 import utils
 
 FILE_NAME = 'trained.npz'
@@ -21,6 +22,7 @@ def get_result(file_name):
     result_string = ""
     for char in chars:
         matched = check(utils.resize20(char[1]), train, train_labels)
+
         if matched < 10:
             result_string += str(int(matched))
             continue
@@ -46,28 +48,27 @@ with requests.Session() as s:
     answer = ''
     for i in range(0, 100):
         start_time = time.time()
-        params = {'ans', answer}
+        params = {'ans': answer}
         response = s.post(host + url, params)
         print('Server Return: ' + response.text)
         if i == 0:
             returned = response.text
             image_url = host + returned
-            url = '/ckeck'
+            url = '/check'
         else:
             returned = response.json()
             image_url = host + returned['url']
             print('Problem ' + str(i) + ':' + image_url)
 
-            response = s.get(image_url, stream=True)
-            target_image = './target_images/' + str(i) + '.png'
-            with open(target_image, 'wb') as out_file:
-                shutil.copyfileobj(response.raw, out_file)
-            del response
+        response = s.get(image_url, stream=True)
+        target_image = './target_images/' + str(i) + '.png'
+        with open(target_image, 'wb') as out_file:
+            shutil.copyfileobj(response.raw, out_file)
+        del response
 
-            answer_string = get_result(target_image)
-            print('String: '  + answer_string)
-            answer_string = utils.remove_first_0(answer_string)
-            answer = str(eval(answer_string))
-            print('Answer: ' + answer)
-            print('--- %s second ---' % (time.time() - start_time))
-            
+        answer_string = get_result(target_image)
+        print('String: '  + answer_string)
+        answer_string = utils.remove_first_0(answer_string)
+        answer = str(eval(answer_string))
+        print('Answer: ' + answer)
+        print('--- %s second ---' % str(time.time() - start_time))
