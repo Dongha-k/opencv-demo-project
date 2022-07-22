@@ -1,4 +1,3 @@
-from fileinput import filename
 import os
 import cv2
 import numpy as np
@@ -15,9 +14,10 @@ for file_name in file_names:
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         train.append(gray)
         train_labels.append(file_name)
-    x = np.array(train)
-    train = x[:, :].reshape(-1, 400).astype(np.float32)
-    train_labels = np.array(train_labels)[:, np.newaxis]
+    
+x = np.array(train)
+train = x[:, :].reshape(-1, 400).astype(np.float32)
+train_labels = np.array(train_labels)[:, np.newaxis]
 
-    np.savez('trained.npz', train = train, train_labels=train_labels)
+np.savez('trained.npz', train = train, train_labels=train_labels)
     

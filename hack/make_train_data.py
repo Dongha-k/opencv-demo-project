@@ -2,7 +2,7 @@ import os
 import cv2
 import utils
 
-image = cv2.imread('../sample/5.png')
+image = cv2.imread('../sample/6.png')
 chars = utils.extract_chars(image)
 
 for char in chars:
